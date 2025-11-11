@@ -1,0 +1,45 @@
+[project]
+name = "api-flix"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+
+
+dependencies = [
+    "argon2-cffi>=25.1.0",
+    "django>=5.2.8",
+    "django-environ>=0.12.0",
+    "django-redis>=6.0.0",
+    "djangorestframework>=3.16.1",
+    "djangorestframework-simplejwt>=5.5.1",
+    "drf-spectacular>=0.29.0",
+    "gunicorn>=23.0.0",
+    "psycopg>=3.2.12",
+    "redis>=7.0.1",
+    "whitenoise>=6.11.0",
+]
+
+[dependency-groups]
+dev = [
+    "django-debug-toolbar>=6.1.0",
+    "django-extensions>=4.1",
+    "ruff>=0.14.4",
+    "werkzeug>=3.1.3",
+]
+
+
+# ==== ruff ====
+[tool.ruff]
+preview = true
+line-length = 88
+extend-exclude = [
+    "*/migrations/*.py",
+    "staticfiles/*",
+]
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "B", "UP"]
+ignore = ["S101", "RUF012", "SIM102",]
+
+[tool.ruff.lint.isort]
