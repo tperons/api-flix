@@ -12,8 +12,8 @@ class ActorSerializer(ModelSerializer):
         fields = ('id', 'name', 'birthday', 'nationality',)
 
     def validate_birthday(self, value):
-        if value < 1900:
+        if value.year < 1900:
             raise ValidationError(_('Tem certeza que esta pessoa ainda está viva?'))
-        elif value > timezone.now().year:
+        elif value > timezone.now().date():
             raise ValidationError(_('Esta pessoa veio do futuro?'))
         return value
