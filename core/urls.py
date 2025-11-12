@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/v1/', include('apps.actors.urls')),
     path('api/v1/', include('apps.genres.urls')),
     path('api/v1/', include('apps.movies.urls')),
-    path('api/v1', include('apps.reviews.urls')),
+    path('api/v1/', include('apps.reviews.urls')),
 ]
 
 
