@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
 ]
 LOCAL_APPS = [
+    'apps.actors',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -56,10 +57,6 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-# LOGIN_REDIRECT_URL = reverse_lazy('users:dashboard')
-# LOGIN_URL = reverse_lazy('users:login')
-# LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
 
 PASSWORD_HASHERS = [
