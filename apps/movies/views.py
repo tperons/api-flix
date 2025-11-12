@@ -15,7 +15,7 @@ from apps.reviews.models import Review
 
 class MovieView:
     permission_classes = (IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly)
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.select_related('genre').prefetch_related('actors', 'reviews')
 
 
 class MovieListCreateView(MovieView, ListCreateAPIView):
