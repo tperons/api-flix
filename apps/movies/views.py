@@ -13,9 +13,12 @@ from apps.movies.serializers import MovieGetSerializer, MovieSerializer
 from apps.reviews.models import Review
 
 
-class MovieListCreateView(ListCreateAPIView):
+class MovieView:
     permission_classes = (IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly)
     queryset = Movie.objects.all()
+
+
+class MovieListCreateView(MovieView, ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -23,9 +26,7 @@ class MovieListCreateView(ListCreateAPIView):
         return MovieSerializer
 
 
-class MovieRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly)
-    queryset = Movie.objects.all()
+class MovieRetrieveUpdateDestroyView(MovieView, RetrieveUpdateDestroyAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -33,9 +34,7 @@ class MovieRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         return MovieSerializer
 
 
-class MovieStatsView(APIView):
-    permission_classes = (IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly)
-    queryset = Movie.objects.all()
+class MovieStatsView(MovieView, APIView):
 
     def get(self, request):
         total_movies = self.queryset.count()

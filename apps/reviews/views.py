@@ -8,13 +8,15 @@ from apps.reviews.models import Review
 from apps.reviews.serializers import ReviewSerializer
 
 
-class ReviewListCreateView(ListCreateAPIView):
+class ReviewView:
     permission_classes = (IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly)
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
 
-class ReviewRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly)
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
+class ReviewListCreateView(ReviewView, ListCreateAPIView):
+    pass
+
+
+class ReviewRetrieveUpdateDestroyView(ReviewView, RetrieveUpdateDestroyAPIView):
+    pass
