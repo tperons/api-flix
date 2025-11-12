@@ -32,7 +32,7 @@ __Este projeto__ é uma API RESTful de backend, desenhada para servir como a esp
 
 Este projeto implementa funcionalidades robustas, seguindo as melhores práticas de desenvolvimento de APIs.
 
-__Backend & Lógica da API__
+__Backend e Lógica da API__
 
 * __Gestão de Catálogo Completa (CRUD)__: Operações para Criar, Ler, Atualizar e Apagar Filmes, Atores e Géneros.
 
@@ -53,13 +53,13 @@ __Backend & Lógica da API__
 
 __Arquitetura & DevOps__
 
-* __Estrutura de Projeto Limpa__: O projeto segue uma arquitetura modular com o código-fonte isolado num diretório backend/, com as aplicações separadas por responsabilidade (actors, genres, movies, etc.).
+* __Estrutura de Projeto Limpa__: O projeto segue uma arquitetura modular com o código-fonte em /core para configurações do projeto e /apps com as aplicações separadas por responsabilidade (actors, genres, movies, etc.).
 
-* __Ambiente 100% Containerizado__: A aplicação e todos os seus serviços (PostgreSQL, Nginx) são geridos com Docker e Docker Compose, garantindo um ambiente de desenvolvimento consistente e pronto para deploy.
+* __Ambiente 100% Containerizado__: A aplicação e todos os seus serviços (Django, PostgreSQL, Nginx e Traefik) são geridos com Docker e Docker Compose, garantindo um ambiente de desenvolvimento consistente e pronto para deploy.
 
-* __Serviços de Produção__: Utiliza Nginx como proxy reverso e Gunicorn como servidor de aplicação WSGI.
+* __Serviços de Produção__: Utiliza Traefik como proxy reverso e load balancer, Nginx como servidor web, Gunicorn como servidor de aplicação WSGI e Whitenoise como servidor de arquivos estáticos (Django admin, por exemplo).
 
-* __Configuração Segura__: Usa variáveis de ambiente (através de um ficheiro .env) para gerir segredos como chaves de API e passwords.
+* __Configuração Segura__: Usa variáveis de ambiente (através de ficheiros .env) para gerir segredos como chaves de API e passwords.
 
 * __Documentação Automática da API__: Integração com drf-spectacular para gerar uma documentação interativa com Swagger UI, que serve como um contrato vivo para os consumidores da API.
 <br>
@@ -72,6 +72,7 @@ Python 3.13+
 Django 5.2+
 Django REST Framework
 Gunicorn (Servidor de Aplicação WSGI)
+Whitenoise (Servidor de arquivos estáticos)
 <br>
 
 * __Base de Dados__:
@@ -80,13 +81,13 @@ PostgreSQL
 
 * __Arquitetura & DevOps__:
 Docker & Docker Compose (Containerização)
-Nginx (Proxy Reverso)
+Nginx (Servidor Web)
+Traefik (Proxy reverso e Load Balancer)
 <br>
 
 * __Bibliotecas Principais__:
 djangorestframework-simplejwt (Autenticação JWT)
 drf-spectacular (Geração de Schema OpenAPI/Swagger)
-django-countries (Gestão de Países)
 <br>
 
 ## ⚙️ Instalação e Execução
@@ -99,25 +100,25 @@ Antes de começar, garanta que você tem as seguintes ferramentas instaladas na 
 
 1. __Clone o repositório__
     ```sh
-    git clone git@github.com:tperons/project-api-flix.git
-    cd django-flix-api
+    git clone git@github.com:tperons/api-flix.git
+    cd flix-api
     ```
 
 2. __Configure as Variáveis de Ambiente__
     O projeto usa um ficheiro `.env` para gerir as configurações sensíveis. Crie uma cópia do ficheiro de exemplo:
     ```sh
-    cp .env.example .env
+    cp .envs/.local/.env.example .envs/.local/.env
     ```
-    Agora, abra o ficheiro .env e preencha os valores para as variáveis da base de dados.
+    Agora, abra o ficheiro .env e preencha os valores para as variáveis.
 
 3. __Construa as imagens Docker__
     ```sh
-    docker compose build
+    docker compose -f docker-compose.local.yml build
     ```
 
 4. __Inicie os serviços__
     ```sh
-    docker compose up -d
+    docker compose -f docker-compose.local.yml up -d
     ```
 
 5. __Configuração Inicial da Base de Dados__
@@ -125,13 +126,14 @@ Antes de começar, garanta que você tem as seguintes ferramentas instaladas na 
 
     * __Crie e aplique as migrações__:
     ```sh
-    docker-compose exec django-flix python backend/manage.py makemigrations
-    docker-compose exec django-flix python backend/manage.py migrate
+    docker compose -f docker-compose.local.yml exec django python manage.py makemigrations
+
+    docker compose -f docker-compose.local.yml exec django python manage.py migrate
     ```
 
     * __Crie um superutilizador para aceder ao Django Admin__:
     ```sh
-    docker-compose exec django-flix python backend/manage.py createsuperuser
+    docker compose -f docker-compose.local.yml exec django python manage.py createsuperuser
     ```
 <br>
 
@@ -140,7 +142,7 @@ Antes de começar, garanta que você tem as seguintes ferramentas instaladas na 
 Após a instalação, a sua API estará acessível e pronta para ser usada.
 
 __Fluxo do Desenvolvedor (Consumidor da API)__
-* __Acesse a Documentação__: A forma principal de interagir com a API é através da documentação Swagger em `http://localhost:8080/api/v1/docs/`. Lá, você pode ver todos os endpoints, os seus formatos de dados e executá-los diretamente.
+* __Acesse a Documentação__: A forma principal de interagir com a API é através da documentação Swagger em `http://localhost:8080/api/v1/schema/`. Lá, você pode ver todos os endpoints, os seus formatos de dados e executá-los diretamente.
 * __Autenticação__:
 
     1. Para realizar ações de escrita (`POST`, `PUT`, `DELETE`), primeiro obtenha um token JWT fazendo um `POST` para `/api/v1/auth/token/` com o `username` e `password` de um utilizador.
